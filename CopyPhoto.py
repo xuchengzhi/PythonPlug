@@ -73,7 +73,7 @@ def Photo(name,msg):
     font = ImageFont.truetype("lang.otf", 280)
     draw = ImageDraw.Draw(f)
     # draw.text((100,100),msg,font=font, fill=(0,0,0,255))
-    draw.text((100,100),".",font=font, fill=(0,0,0,255))
+    draw.text((100,100),msg,font=font, fill=(0,0,0,255))
     f = f.convert('P')
     f.save("new1/"+name+".png")
 
@@ -89,8 +89,43 @@ def CopyFile(name):
     except Exception as e:
         raise e
     
+def function():
+    try:
+        f = open("6886.txt","r",encoding="utf-8")
+    except Exception as e:
+        raise e
+    wordlist = f.read().replace("\ufeff","")
+
+    for i in range(len(wordlist)):
+        if wordlist[i] == "\n":
+            pass
+        else:
+            word = font_ten(wordlist[i])
+            try:
+                Photo(str(word[0]),wordlist[i])
+            except Exception as e:
+                print(word)
 
 
+def font_ten(msg):
+    '''汉字转10进制'''
+    msg_list = []
+    for i in msg:
+        
+        try:
+            nums="0x"+i.encode('unicode_escape').decode().replace('\\u','')
+            word = int(nums,16)
+            msg_list.append(word)
+        except Exception as e:
+            nums = "0x"+i.encode().hex()
+            word = int(nums,16)
+            msg_list.append(word)
+
+        
+        
+        
+
+    return msg_list
 
 if __name__ == '__main__':
-    readfile()
+    function()
