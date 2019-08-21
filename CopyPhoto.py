@@ -68,14 +68,14 @@ def sixteen_to_ten(num):
     
     return nums
 
-def Photo(name,msg):
+def Photo(path,name,msg):
     f =  Image.new('RGBA', (500, 500), (255, 255, 255, 0))
     font = ImageFont.truetype("lang.otf", 280)
     draw = ImageDraw.Draw(f)
     # draw.text((100,100),msg,font=font, fill=(0,0,0,255))
     draw.text((100,100),msg,font=font, fill=(0,0,0,255))
     f = f.convert('P')
-    f.save("new1/"+name+".png")
+    f.save("{}/{}.png".format(path,name))
 
 def To8bit(img):
     lena = Image.open(img)
@@ -97,14 +97,40 @@ def function():
     wordlist = f.read().replace("\ufeff","")
 
     for i in range(len(wordlist)):
+
         if wordlist[i] == "\n":
             pass
-        else:
+
+        elif i < 200:
             word = font_ten(wordlist[i])
             try:
-                Photo(str(word[0]),wordlist[i])
+                Photo("100",str(word[0]),wordlist[i])
             except Exception as e:
                 print(word)
+        elif i < 600:
+            word = font_ten(wordlist[i])
+            try:
+                Photo("300",str(word[0]),wordlist[i])
+            except Exception as e:
+                print(word)
+        elif i < 1000:
+            word = font_ten(wordlist[i])
+            try:
+                Photo("500",str(word[0]),wordlist[i])
+            except Exception as e:
+                print(word)
+        elif i < 1796:
+            word = font_ten(wordlist[i])
+            try:
+                Photo("898",str(word[0]),wordlist[i])
+            except Exception as e:
+                print(word)
+        else:
+            word = font_ten(wordlist[i])
+            # try:
+            #     Photo(str(word[0]),wordlist[i])
+            # except Exception as e:
+            #     print(word)
 
 
 def font_ten(msg):
