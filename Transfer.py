@@ -85,14 +85,14 @@ if __name__ == '__main__':
 	# img = transparent_back(img)
 	# img.show()
 	# img.save("111.png")
-    # im = Image.open('1.gif')
-    # frames = []
-    # for i, frame in enumerate(iter_frames(im)):
+    im = Image.open('1.gif')
+    frames = []
+    for i, frame in enumerate(iter_frames(im)):
 
-    #     frame.save("p/"+str(i)+'.png',**frame.info)
-    #     img = Image.open("p/"+str(i)+'.png')
-    #     img = transparent_back(img)
-    #     img.save("new/"+str(i)+'.png')
-    #     frames.append(imageio.imread("new/"+str(i)+'.png'))
-    # imageio.mimsave("ceshi.gif", frames, 'GIF', duration = 2)
+        frame.save("p/"+str(i)+'.png',**frame.info)
+        img = Image.open("p/"+str(i)+'.png')
+        img = transparent_back(img)
+        img.save("new/"+str(i)+'.png')
+        frames.append(imageio.imread("new/"+str(i)+'.png'))
+    imageio.mimsave("ceshi.gif", frames, 'GIF', duration = 2)
     # shutil.rmtree("p")
