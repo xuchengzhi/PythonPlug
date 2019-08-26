@@ -82,13 +82,28 @@ class Application(tornado.web.Application):
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
+ 
+def read_json():
+    with open("E:/code/py/shoujizaozi_Test/AutoPay/logs/run_2019_08_26.log") as pf:
+        numbers = pf.readlines()[-4:-1]#json.load(pf)
+        word = ""
+        for i in numbers:
+            word += i
+        return word
+
+
+
 #这里不是Spark Streaming的主场，所以用publisher模拟发布数据
 def publisher():
     r = redis.Redis(host='192.168.248.126', port=6379, decode_responses=True)
     a = 1
     while True:
-        print(a)
-        r.publish("my_channel", "Hello:" + str(a))
+        data=read_json()
+        old = data
+        if old == data:
+            pass
+        # r.publish("my_channel", "Hello:" + str(a))
+        r.publish("my_channel", data)
         a += 1
         time.sleep(1)
 
@@ -102,14 +117,13 @@ def subscriber():
 
 def data_handler(message):
     url = "http://127.0.0.1:8090/message"
-    data = {'data': message['data']}
+    # data = {'data': message['data']}
+    data = message['data']
     http_request = httpclient.HTTPRequest(url, method="POST",
                                           body=json.dumps(data))
     http_client = httpclient.HTTPClient()
     http_client.fetch(http_request)
 
-def readfile():
-    data_handler('Hello:12')
 
 if __name__ == "__main__":
     Thread(target=publisher).start()
