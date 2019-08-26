@@ -49,7 +49,8 @@ class MyWebSocketHandler(websocket.WebSocketHandler):
 
     def on_message(self, message):
         print(message)
-
+    def check_origin(self, origin):
+        return True
     def on_close(self):
         self.application.register.logout(self.callback)
         print(str(self) + "connection closed")
@@ -84,7 +85,7 @@ class Application(tornado.web.Application):
 
  
 def read_json():
-    with open("E:/code/py/shoujizaozi_Test/AutoPay/logs/run_2019_08_26.log") as pf:
+    with open("E:/code/py/shoujizaozi_Test/AutoPay/logs/run_2019_08_26.log",encoding = "gbk") as pf:
         numbers = pf.readlines()[-3:-1]#json.load(pf)
         word = ""
         for i in numbers:
@@ -93,17 +94,18 @@ def read_json():
 
 
 
+
 #这里不是Spark Streaming的主场，所以用publisher模拟发布数据
 def publisher():
     r = redis.Redis(host='192.168.248.126', port=6379, decode_responses=True)
     # a = 1
     while True:
-        data=read_json()
+        data = read_json()#.encode('utf-8').decode('unicode_escape')
         old = data
         if old == data:
             pass
         # r.publish("my_channel", "Hello:" + str(a))
-        r.publish("my_channel", "测试".encode("gbk"))
+        r.publish("my_channel", data)
         # a += 1
         time.sleep(1)
 
@@ -117,10 +119,8 @@ def subscriber():
 
 def data_handler(message):
     url = "http://127.0.0.1:8090/message"
-    # data = {'data': message['data']}
-    data = message['data']
-    http_request = httpclient.HTTPRequest(url, method="POST",
-                                          body=json.dumps(data))
+    data = {'data': message['data']}
+    http_request = httpclient.HTTPRequest(url, method="POST", body=json.dumps(data))
     http_client = httpclient.HTTPClient()
     http_client.fetch(http_request)
 
@@ -133,3 +133,4 @@ if __name__ == "__main__":
     app.listen(8090)
 
     tornado.ioloop.IOLoop.current().start()
+    # read_json()
