@@ -1,6 +1,18 @@
-<script>
-    var ws = new WebSocket("ws://localhost:8090/pigeon");
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script>
+    var ws = new WebSocket("ws://localhost:8090/log");
     ws.onmessage = function (evt) {
         console.log(evt.data);
+        document.getElementById('ms').innerText= evt.data;
+
     };
 </script>
+</head>
+<body>
+<div id="ms"></div>
+</body>
+</html>
+

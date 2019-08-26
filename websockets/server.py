@@ -70,7 +70,7 @@ class Application(tornado.web.Application):
         self.register = Register()
         handlers = [
             (r"/", IndexHandler),
-            (r"/pigeon", MyWebSocketHandler),
+            (r"/log", MyWebSocketHandler),
             (r"/message", NewMessageHandler)
         ]
         settings = dict(
@@ -85,7 +85,7 @@ class Application(tornado.web.Application):
  
 def read_json():
     with open("E:/code/py/shoujizaozi_Test/AutoPay/logs/run_2019_08_26.log") as pf:
-        numbers = pf.readlines()[-4:-1]#json.load(pf)
+        numbers = pf.readlines()[-3:-1]#json.load(pf)
         word = ""
         for i in numbers:
             word += i
@@ -96,15 +96,15 @@ def read_json():
 #这里不是Spark Streaming的主场，所以用publisher模拟发布数据
 def publisher():
     r = redis.Redis(host='192.168.248.126', port=6379, decode_responses=True)
-    a = 1
+    # a = 1
     while True:
         data=read_json()
         old = data
         if old == data:
             pass
         # r.publish("my_channel", "Hello:" + str(a))
-        r.publish("my_channel", data)
-        a += 1
+        r.publish("my_channel", "测试".encode("gbk"))
+        # a += 1
         time.sleep(1)
 
 # 订阅redis中的特定channel，收到消息后，调用data_handler向/message发消息
